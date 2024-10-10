@@ -8,6 +8,8 @@ const TransactionList = () => {
   const [transactions, setTransactions] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [currentTransaction, setCurrentTransaction] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filteredData, setFilteredData] = useState(transactions);
   const [form] = Form.useForm(); // สร้างฟอร์ม
   const { Option } = Select;
 
@@ -45,8 +47,24 @@ const TransactionList = () => {
   };
 
   const getTotalAmount = () => {
-    return transactions.reduce((total, record) => total + Number(record.amount), 0);
+    const dataToSummarize = filteredData.length > 0 ? filteredData : transactions;
+    return dataToSummarize.reduce((total, record) => total + Number(record.amount), 0);
   };
+
+  const handleSearch = (event) => {
+    const searchValue = event.target.value.toLowerCase();
+    setSearchTerm(searchValue);
+    
+    const filtered = transactions.filter(transaction =>
+      transaction.description.toLowerCase().includes(searchValue)
+    );
+    
+    setFilteredData(filtered);
+  };
+
+  const filteredTransactions = transactions.filter((transaction) =>
+    transaction.description.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const columns = [
     { 
@@ -96,17 +114,31 @@ const TransactionList = () => {
     <>
       <div style={{ padding: '20px' }}>
         <h2>Transaction List</h2>
+
+        <Input 
+          placeholder="Search by description" 
+          value={searchTerm} 
+          onChange={handleSearch} 
+          style={{ marginBottom: 20 }} 
+        />
+
         <Table
           columns={columns}
-          dataSource={transactions}
+          dataSource={filteredTransactions}
           rowKey="id"
           bordered
           pagination={{ pageSize: 10 }}
+          onChange={(pagination, filters, sorter, extra) => {
+            const filtered = extra.currentDataSource.filter(transaction =>
+              transaction.description.toLowerCase().includes(searchTerm)
+            );
+            setFilteredData(filtered);
+          }}
           summary={() => (
             <Table.Summary.Row>
               <Table.Summary.Cell colSpan={2}>Total</Table.Summary.Cell>
               <Table.Summary.Cell>
-                {getTotalAmount()} {/* แสดงผลรวม */}
+                {getTotalAmount()} 
               </Table.Summary.Cell>
               <Table.Summary.Cell colSpan={3}></Table.Summary.Cell>
             </Table.Summary.Row>
