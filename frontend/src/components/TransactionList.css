@@ -1,0 +1,14 @@
+/* Style the footer */
+.ant-table-summary {
+    background-color: #fafafa !important; /* Force the background color to change */
+    font-weight: bold; /* Make the text bold */
+    color: rgb(0, 0, 0); /* Change the text color to white to contrast with the dark background */
+  }
+  
+  .ant-table-summary-row td {
+    border-top: 2px solid #d9d9d9;
+    padding: 16px;
+    font-weight: bold;
+    color: white; /* Ensure the text color is also white */
+  }
+  

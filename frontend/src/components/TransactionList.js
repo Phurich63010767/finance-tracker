@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Table, Button, Modal, Form, Input, Popconfirm, DatePicker, Select } from 'antd';
 import moment from 'moment';
 import { fetchTransactions, updateTransaction, deleteTransaction } from './../services/api'
+import './TransactionList.css';
 
 const TransactionList = () => {
   const [transactions, setTransactions] = useState([]);
@@ -41,6 +42,10 @@ const TransactionList = () => {
   const handleDelete = async (id) => {
     await deleteTransaction(id);
     getTransactions();
+  };
+
+  const getTotalAmount = () => {
+    return transactions.reduce((total, record) => total + Number(record.amount), 0);
   };
 
   const columns = [
@@ -91,7 +96,22 @@ const TransactionList = () => {
     <>
       <div style={{ padding: '20px' }}>
         <h2>Transaction List</h2>
-        <Table columns={columns} dataSource={transactions} rowKey="id" />
+        <Table
+          columns={columns}
+          dataSource={transactions}
+          rowKey="id"
+          bordered
+          pagination={{ pageSize: 10 }}
+          summary={() => (
+            <Table.Summary.Row>
+              <Table.Summary.Cell colSpan={2}>Total</Table.Summary.Cell>
+              <Table.Summary.Cell>
+                {getTotalAmount()} {/* แสดงผลรวม */}
+              </Table.Summary.Cell>
+              <Table.Summary.Cell colSpan={3}></Table.Summary.Cell>
+            </Table.Summary.Row>
+          )}
+        />
       </div>
 
       <Modal
