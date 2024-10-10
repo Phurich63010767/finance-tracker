@@ -15,8 +15,13 @@ export class TransactionsService {
   async create(createTransactionDto: CreateTransactionDto): Promise<Transaction> {
     console.log('Creating transaction:', createTransactionDto);
     const transaction = this.transactionsRepository.create(createTransactionDto);
+    if (createTransactionDto.type === 'income') {
+      transaction.amount = Math.abs(createTransactionDto.amount); // Ensure positive value
+    } else if (createTransactionDto.type === 'expense') {
+      transaction.amount = -Math.abs(createTransactionDto.amount); // Ensure negative value
+    }
     const savedTransaction = await this.transactionsRepository.save(transaction);
-    console.log('Saved transaction:', savedTransaction); // Log ข้อมูลที่บันทึก
+    console.log('Saved transaction:', savedTransaction);
     return savedTransaction;
   }
 
@@ -48,6 +53,11 @@ export class TransactionsService {
   
     const updatedTransaction = { ...transaction, ...updateTransactionDto };
     console.log('Updated Transaction:', updatedTransaction);
+    if (updateTransactionDto.type === 'income') {
+      updatedTransaction.amount = Math.abs(updateTransactionDto.amount); // Ensure positive value
+    } else if (updateTransactionDto.type === 'expense') {
+      updatedTransaction.amount = -Math.abs(updateTransactionDto.amount); // Ensure negative value
+    }
     const savedTransaction = await this.transactionsRepository.save(updatedTransaction);
     console.log('Saved Transaction:', savedTransaction);
     return savedTransaction;
