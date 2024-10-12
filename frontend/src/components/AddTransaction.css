@@ -1,0 +1,12 @@
+.title {
+    text-align: center;  
+}
+
+.form-container {
+    display: flex;               
+    justify-content: center;                    
+}
+
+.main-form {
+    width: 100%;                   
+}

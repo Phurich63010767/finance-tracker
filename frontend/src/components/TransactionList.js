@@ -10,10 +10,9 @@ const TransactionList = () => {
   const [currentTransaction, setCurrentTransaction] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredData, setFilteredData] = useState(transactions);
-  const [form] = Form.useForm(); // สร้างฟอร์ม
+  const [form] = Form.useForm(); 
   const { Option } = Select;
 
-  // ดึงข้อมูลจาก backend เมื่อ component ถูกโหลด
   useEffect(() => {
     getTransactions();
   }, []);
@@ -23,14 +22,13 @@ const TransactionList = () => {
     setTransactions(response);
   };
 
-  // ฟังก์ชันเปิด modal สำหรับแก้ไข
   const handleEdit = (transaction) => {
     const transactionWithDate = {
       ...transaction,
-      date: transaction.date ? moment(transaction.date) : null, // แปลงวันที่เป็น moment object
+      date: transaction.date ? moment(transaction.date) : null,
     };
     setCurrentTransaction(transactionWithDate);
-    form.setFieldsValue(transactionWithDate); // ตั้งค่าให้ฟอร์มมีค่าเริ่มต้นเป็นค่าของ transaction ที่เลือก
+    form.setFieldsValue(transactionWithDate); 
     setIsEditing(true);
   };
 
@@ -113,7 +111,7 @@ const TransactionList = () => {
   return (
     <>
       <div style={{ padding: '20px' }}>
-        <h2>Transaction List</h2>
+        <h2 className="title">Transaction List</h2>
 
         <Input 
           placeholder="Search by description" 
@@ -150,15 +148,15 @@ const TransactionList = () => {
         title="Edit Transaction"
         visible={isEditing}
         onCancel={() => setIsEditing(false)}
-        footer={null} // ซ่อน footer
+        footer={null} 
       >
         <Form
-          form={form} // กำหนดฟอร์ม
+          form={form} 
           layout="vertical"
-          onFinish={(values) => { // ใช้ onFinish แทน onOk
-            handleUpdate(values, currentTransaction.id); // ส่งค่าที่ได้ไปฟังก์ชันการอัปเดต
+          onFinish={(values) => { 
+            handleUpdate(values, currentTransaction.id); 
           }}
-          initialValues={currentTransaction} // ตั้งค่า initialValues
+          initialValues={currentTransaction} 
         >
           <Form.Item
             label="Description"

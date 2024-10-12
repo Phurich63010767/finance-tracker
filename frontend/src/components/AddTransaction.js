@@ -1,5 +1,6 @@
 import { Form, Input, InputNumber, Button, Select, DatePicker } from 'antd'; 
 import { createTransaction } from './../services/api'
+import './AddTransaction.css';
 
 const { Option } = Select;
 
@@ -13,8 +14,9 @@ const AddTransaction = () => {
 
   return (
     <div style={{ padding: '20px' }}>
-      <h2>Add Transaction</h2>
-      <Form
+      <h2 className="title">Add Transaction</h2>
+      <div className="form-container">
+        <Form className="main-form"
         form={form}
         layout="vertical"
         onFinish={handleSubmit}
@@ -60,7 +62,8 @@ const AddTransaction = () => {
             Add Transaction
           </Button>
         </Form.Item>
-      </Form>
+      </Form>   
+      </div>
     </div>
   );
 };
